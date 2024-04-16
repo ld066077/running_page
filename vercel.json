@@ -3,5 +3,14 @@
     "deploymentEnabled": {
       "gh-pages": false
     }
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "build": {
+    "env": {
+      "YARN_VERSION": "1.22.22",
+      "COREPACK_ENABLE": "true"
+    }
   }
 }
