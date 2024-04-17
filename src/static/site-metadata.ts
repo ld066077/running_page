@@ -10,7 +10,7 @@ interface ISiteMetadataResult {
 }
 
 const data: ISiteMetadataResult = {
-  siteTitle: 'Running',
+  siteTitle: 'Running record',
   siteUrl: 'https://run.imyxl.com',
   logo: '',
   description: 'Personal site and blog',
