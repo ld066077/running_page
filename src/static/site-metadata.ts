@@ -10,7 +10,7 @@ interface ISiteMetadataResult {
 }
 
 const data: ISiteMetadataResult = {
-  siteTitle: 'imyxl的跑步记录（数据源自keep）',
+  siteTitle: 'imyxl的跑步记录',
   siteUrl: 'https://run.imyxl.com',
   logo: '',
   description: 'Personal site and blog',
