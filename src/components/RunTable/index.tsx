@@ -29,9 +29,9 @@ const RunTable = ({
   const [sortFuncInfo, setSortFuncInfo] = useState('');
   // TODO refactor?
   const sortKMFunc: SortFunc = (a, b) =>
-    sortFuncInfo === '距离/km' ? a.distance - b.distance : b.distance - a.distance;
+    sortFuncInfo === 'KM' ? a.distance - b.distance : b.distance - a.distance;
   const sortPaceFunc: SortFunc = (a, b) =>
-    sortFuncInfo === '配速'
+    sortFuncInfo === '均速'
       ? a.average_speed - b.average_speed
       : b.average_speed - a.average_speed;
   const sortBPMFunc: SortFunc = (a, b) => {
@@ -42,17 +42,17 @@ const RunTable = ({
   const sortRunTimeFunc: SortFunc = (a, b) => {
     const aTotalSeconds = convertMovingTime2Sec(a.moving_time);
     const bTotalSeconds = convertMovingTime2Sec(b.moving_time);
-    return sortFuncInfo === '跑步时长'
+    return sortFuncInfo === '时长'
       ? aTotalSeconds - bTotalSeconds
       : bTotalSeconds - aTotalSeconds;
   };
   const sortDateFuncClick =
     sortFuncInfo === '日期' ? sortDateFunc : sortDateFuncReverse;
   const sortFuncMap = new Map([
-    ['距离/km', sortKMFunc],
-    ['配速', sortPaceFunc],
+    ['KM', sortKMFunc],
+    ['均速', sortPaceFunc],
     ['步频', sortBPMFunc],
-    ['跑步时长', sortRunTimeFunc],
+    ['时长', sortRunTimeFunc],
     ['日期', sortDateFuncClick],
   ]);
 
