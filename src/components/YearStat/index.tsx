@@ -55,11 +55,11 @@ const YearStat = ({ year, onClick }: { year: string, onClick: (_year: string) =>
       {...eventHandlers}
     >
       <section>
-        <Stat value={year} description=" Journey" />
-        <Stat value={runs.length} description=" Runs" />
-        <Stat value={sumDistance} description=" KM" />
-        <Stat value={avgPace} description=" Avg Pace" />
-        <Stat value={`${streak} day`} description=" Streak" />
+        <Stat value={year} description=" 数据" />
+        <Stat value={runs.length} description=" 次起跑" />
+        <Stat value={sumDistance} description=" 公里" />
+        <Stat value={avgPace} description=" 均速" />
+        <Stat value={`${streak} day`} description=" 连续跑步" />
         {hasHeartRate && (
           <Stat value={avgHeartRate} description=" Avg Heart Rate" />
         )}
