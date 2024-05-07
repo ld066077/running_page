@@ -1,1 +1,1 @@
-forked by https://github.com/yihong0618/running_page/tree/master
+forked from https://github.com/yihong0618/running_page/tree/master
