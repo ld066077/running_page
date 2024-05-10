@@ -98,7 +98,7 @@ jobs:
           python run_page/nike_to_strava_sync.py ${{ secrets.NIKE_REFRESH_TOKEN }} ${{ secrets.STRAVA_CLIENT_ID }} ${{ secrets.STRAVA_CLIENT_SECRET }} ${{ secrets.STRAVA_CLIENT_REFRESH_TOKEN }}
 
       - name: Run sync Keep script
-        if: env.RUN_TYPE == 'keep'
+        #if: env.RUN_TYPE == 'keep'
         run: |
           python run_page/keep_sync.py ${{ secrets.KEEP_MOBILE }} ${{ secrets.KEEP_PASSWORD }} --with-gpx
 
@@ -120,7 +120,7 @@ jobs:
 
       # for garmin if you want generate `tcx` you can add --tcx command in the args.
       - name: Run sync Garmin script
-        if: env.RUN_TYPE == 'garmin'
+        #if: env.RUN_TYPE == 'garmin'
         run: |
           # make garimin secret string `python run_page/get_garmin_secret.py ${email} ${password}
           python run_page/garmin_sync.py ${{ secrets.GARMIN_SECRET_STRING }}
