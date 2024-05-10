@@ -35,7 +35,7 @@ const RunTable = ({
       ? a.average_speed - b.average_speed
       : b.average_speed - a.average_speed;
   const sortBPMFunc: SortFunc = (a, b) => {
-    return sortFuncInfo === '步频'
+    return sortFuncInfo === '心率'
       ? (a.average_heartrate ?? 0) - (b.average_heartrate ?? 0)
       : (b.average_heartrate ?? 0) - (a.average_heartrate ?? 0);
   };
@@ -51,7 +51,7 @@ const RunTable = ({
   const sortFuncMap = new Map([
     ['KM', sortKMFunc],
     ['均速', sortPaceFunc],
-    ['步频', sortBPMFunc],
+    ['心率', sortBPMFunc],
     ['时长', sortRunTimeFunc],
     ['日期', sortDateFuncClick],
   ]);

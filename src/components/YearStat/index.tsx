@@ -56,12 +56,12 @@ const YearStat = ({ year, onClick }: { year: string, onClick: (_year: string) =>
     >
       <section>
         <Stat value={year} description=" 数据" />
-        <Stat value={runs.length} description=" 次起跑" />
+        <Stat value={runs.length} description=" 次跑步" />
         <Stat value={sumDistance} description=" 公里" />
         <Stat value={avgPace} description=" 均速" />
-        <Stat value={`${streak} day`} description=" 连续跑步" />
+        <Stat value={`${streak} 天`} description=" 连续跑步" />
         {hasHeartRate && (
-          <Stat value={avgHeartRate} description=" Avg Heart Rate" />
+          <Stat value={avgHeartRate} description=" 平均心率" />
         )}
       </section>
       {year !== 'Total' && hovered && (
