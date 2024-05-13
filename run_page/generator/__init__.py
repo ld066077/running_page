@@ -61,10 +61,20 @@ class Generator:
                 filters = {"before": datetime.datetime.utcnow()}
 
         for activity in self.client.get_activities(**filters):
+            # Print out the activity's details for debugging
+            print(f"Activity data: {activity}")
+            print(f"Activity attributes: {dir(activity)}")
+
             if self.only_run and activity.type != "Run":
                 continue
-            if IGNORE_BEFORE_SAVING:
-                activity.summary_polyline = filter_out(activity.summary_polyline)
+
+        # Check if the map attribute and summary_polyline exist before accessing
+            if hasattr(activity, 'map') and activity.map and hasattr(activity.map, 'summary_polyline') and activity.map.summary_polyline:
+                processed_polyline = filter_out(activity.map.summary_polyline)
+                print(f"Processed summary polyline for Activity ID {activity.id}")
+            else:
+                print(f"No summary polyline available for Activity ID {activity.id}")
+
             created = update_or_create_activity(self.session, activity)
             if created:
                 sys.stdout.write("+")
