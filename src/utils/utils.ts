@@ -188,28 +188,39 @@ const geoJsonForMap = (): FeatureCollection<RPGeometry> => ({
   })
 
 const titleForRun = (run: Activity): string => {
-  const runDistance = run.distance / 1000;
-  const runHour = +run.start_date_local.slice(11, 13);
-  if (runDistance > 20 && runDistance < 40) {
-    return RUN_TITLES.HALF_MARATHON_RUN_TITLE;
+  // 检查是否包含指定的关键字
+  const name = run.name;
+  const containsDefaultTitle = ['Morning Run', 'Midday Run', 'Afternoon Run', 'Evening Run', 'Night Run'].some(keyword => name.includes(keyword));
+
+  // 如果包含关键字，则使用原来的逻辑生成标题
+  if (containsDefaultTitle) {
+    const runDistance = run.distance / 1000;
+    const runHour = +run.start_date_local.slice(11, 13);
+    if (runDistance > 20 && runDistance < 40) {
+      return RUN_TITLES.HALF_MARATHON_RUN_TITLE;
+    }
+    if (runDistance >= 40) {
+      return RUN_TITLES.FULL_MARATHON_RUN_TITLE;
+    }
+    if (runHour >= 0 && runHour <= 10) {
+      return RUN_TITLES.MORNING_RUN_TITLE;
+    }
+    if (runHour > 10 && runHour <= 14) {
+      return RUN_TITLES.MIDDAY_RUN_TITLE;
+    }
+    if (runHour > 14 && runHour <= 18) {
+      return RUN_TITLES.AFTERNOON_RUN_TITLE;
+    }
+    if (runHour > 18 && runHour <= 21) {
+      return RUN_TITLES.EVENING_RUN_TITLE;
+    }
+    return RUN_TITLES.NIGHT_RUN_TITLE;
   }
-  if (runDistance >= 40) {
-    return RUN_TITLES.FULL_MARATHON_RUN_TITLE;
-  }
-  if (runHour >= 0 && runHour <= 10) {
-    return RUN_TITLES.MORNING_RUN_TITLE;
-  }
-  if (runHour > 10 && runHour <= 14) {
-    return RUN_TITLES.MIDDAY_RUN_TITLE;
-  }
-  if (runHour > 14 && runHour <= 18) {
-    return RUN_TITLES.AFTERNOON_RUN_TITLE;
-  }
-  if (runHour > 18 && runHour <= 21) {
-    return RUN_TITLES.EVENING_RUN_TITLE;
-  }
-  return RUN_TITLES.NIGHT_RUN_TITLE;
+
+  // 如果不包含关键字，则直接使用 run.name 作为标题
+  return name;
 };
+  
 
 export interface IViewState {
   longitude?: number;
