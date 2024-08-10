@@ -8,7 +8,6 @@ from generator import Generator
 def run_strava_sync(client_id, client_secret, refresh_token, only_run=False):
     generator = Generator(SQL_FILE)
     generator.set_strava_config(client_id, client_secret, refresh_token)
-    # if you want to refresh data change False to True
     generator.only_run = only_run
     generator.sync(False)
 
@@ -19,7 +18,7 @@ def run_strava_sync(client_id, client_secret, refresh_token, only_run=False):
         activity['name'] = get_activity_title(activity)
 
     with open(JSON_FILE, "w") as f:
-        json.dump(activities_list, f, ensure_ascii=False, indent=4)  # 格式化输出 JSON
+        json.dump(activities_list, f, ensure_ascii=False, indent=4)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
