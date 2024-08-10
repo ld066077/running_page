@@ -11,7 +11,7 @@ except:
 from generator import Generator
 from stravalib.client import Client
 from stravalib.exc import RateLimitExceeded
-from config import get_activity_title  # 从config.py导入获取标题的函数
+
 
 def adjust_time(time, tz_name):
     tc_offset = datetime.now(pytz.timezone(tz_name)).utcoffset()
@@ -52,13 +52,9 @@ def make_activities_file(sql_file, data_dir, json_file, file_suffix="gpx"):
     generator = Generator(sql_file)
     generator.sync_from_data_dir(data_dir, file_suffix=file_suffix)
     activities_list = generator.load()
-
-    # 更新活动标题
-    for activity in activities_list:
-        activity['name'] = get_activity_title(activity)
-
     with open(json_file, "w") as f:
-        json.dump(activities_list, f, ensure_ascii=False, indent=4)
+        json.dump(activities_list, f)
+
 
 def make_strava_client(client_id, client_secret, refresh_token):
     client = Client()

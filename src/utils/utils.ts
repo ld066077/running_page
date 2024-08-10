@@ -29,10 +29,13 @@ export interface Activity {
 const titleForShow = (run: Activity): string => {
   const date = run.start_date_local.slice(0, 11);
   const distance = (run.distance / 1000.0).toFixed(2);
-  
-  // 优先使用Strava的活动标题
-  let name = run.name || titleForRun(run); // 使用Strava标题或默认逻辑获取的标题
-  
+  let name = 'Run';
+  if (run.name.slice(0, 7) === 'Running') {
+    name = 'run';
+  }
+  if (run.name) {
+    name = run.name;
+  }
   return `${name} ${date} ${distance} KM ${
     !run.summary_polyline ? '(No map data for this run)' : ''
   }`;
@@ -187,7 +190,6 @@ const geoJsonForMap = (): FeatureCollection<RPGeometry> => ({
 const titleForRun = (run: Activity): string => {
   const runDistance = run.distance / 1000;
   const runHour = +run.start_date_local.slice(11, 13);
-  
   if (runDistance > 20 && runDistance < 40) {
     return RUN_TITLES.HALF_MARATHON_RUN_TITLE;
   }
