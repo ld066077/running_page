@@ -1,9 +1,8 @@
 import argparse
 import json
 
-from config import JSON_FILE, SQL_FILE
+from config import JSON_FILE, SQL_FILE, get_activity_title  # 导入获取活动标题的函数
 from generator import Generator
-
 
 # for only run type, we use the same logic as garmin_sync
 def run_strava_sync(client_id, client_secret, refresh_token, only_run=False):
@@ -14,9 +13,13 @@ def run_strava_sync(client_id, client_secret, refresh_token, only_run=False):
     generator.sync(False)
 
     activities_list = generator.load()
-    with open(JSON_FILE, "w") as f:
-        json.dump(activities_list, f)
 
+    # 更新活动标题
+    for activity in activities_list:
+        activity['name'] = get_activity_title(activity)
+
+    with open(JSON_FILE, "w") as f:
+        json.dump(activities_list, f, ensure_ascii=False, indent=4)  # 格式化输出 JSON
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
