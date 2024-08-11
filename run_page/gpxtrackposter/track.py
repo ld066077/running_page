@@ -320,10 +320,6 @@ class Track:
         }
 
     def to_namedtuple(self):
-        # 如果文件名包含 .gpx，则不生成 namedtuple
-        if any(file_name.endswith('.gpx') for file_name in self.file_names):
-            return None
-        
         d = {
             "id": self.run_id,
             "name": "run from gpx",  # 这里可以改为其他标识，或者根据不同来源的数据使用不同名称

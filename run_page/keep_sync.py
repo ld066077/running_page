@@ -83,87 +83,81 @@ def decode_runmap_data(text, is_geo=False):
 def parse_raw_data_to_nametuple(
     run_data, old_gpx_ids, session, with_download_gpx=False
 ):
-    # 无论输入数据如何，始终返回 None
-    return None
+    run_data = run_data["data"]
+    run_points_data = []
 
-#def parse_raw_data_to_nametuple(
-#    run_data, old_gpx_ids, session, with_download_gpx=False
-#):
-#    run_data = run_data["data"]
-#    run_points_data = []
-#
-#    # 5898009e387e28303988f3b7_9223370441312156007_rn middle
-#    keep_id = run_data["id"].split("_")[1]
-#
-#    start_time = run_data["startTime"]
-#    avg_heart_rate = None
-#    decoded_hr_data = []
-#    if run_data["heartRate"]:
-#        avg_heart_rate = run_data["heartRate"].get("averageHeartRate", None)
-#        heart_rate_data = run_data["heartRate"].get("heartRates", None)
-#        if heart_rate_data is not None:
-#            decoded_hr_data = decode_runmap_data(heart_rate_data)
-#        # fix #66
-#        if avg_heart_rate and avg_heart_rate < 0:
-#            avg_heart_rate = None
-#
-#    if run_data["geoPoints"]:
-#        run_points_data = decode_runmap_data(run_data["geoPoints"], True)
-#        run_points_data_gpx = run_points_data
-#        if TRANS_GCJ02_TO_WGS84:
-#            run_points_data = [
-#                list(eviltransform.gcj2wgs(p["latitude"], p["longitude"]))
-#                for p in run_points_data
-#            ]
-#            for i, p in enumerate(run_points_data_gpx):
-#                p["latitude"] = run_points_data[i][0]
-#                p["longitude"] = run_points_data[i][1]
-#
-#        for p in run_points_data_gpx:
-#            p_hr = find_nearest_hr(decoded_hr_data, int(p["timestamp"]), start_time)
-#            if p_hr:
-#                p["hr"] = p_hr
-#        if with_download_gpx:
-#            if (
-#                str(keep_id) not in old_gpx_ids
-#                and run_data["dataType"] == "outdoorRunning"
-#            ):
-#                gpx_data = parse_points_to_gpx(run_points_data_gpx, start_time)
-#                download_keep_gpx(gpx_data, str(keep_id))
-#    else:
-#        print(f"ID {keep_id} no gps data")
-#    polyline_str = polyline.encode(run_points_data) if run_points_data else ""
-#    start_latlng = start_point(*run_points_data[0]) if run_points_data else None
-#    start_date = datetime.utcfromtimestamp(start_time / 1000)
-#    tz_name = run_data.get("timezone", "")
-#    start_date_local = adjust_time(start_date, tz_name)
-#    end = datetime.utcfromtimestamp(run_data["endTime"] / 1000)
-#    end_local = adjust_time(end, tz_name)
-#    if not run_data["duration"]:
-#        print(f"ID {keep_id} has no total time just ignore please check")
-#        return
-#    d = {
-#        "id": int(keep_id),
-#        "name": "run from keep",
-#        # future to support others workout now only for run
-#        "type": "Run",
-#        "start_date": datetime.strftime(start_date, "%Y-%m-%d %H:%M:%S"),
-#        "end": datetime.strftime(end, "%Y-%m-%d %H:%M:%S"),
-#        "start_date_local": datetime.strftime(start_date_local, "%Y-%m-%d %H:%M:%S"),
-#        "end_local": datetime.strftime(end_local, "%Y-%m-%d %H:%M:%S"),
-#        "length": run_data["distance"],
-#        "average_heartrate": int(avg_heart_rate) if avg_heart_rate else None,
-#        "map": run_map(polyline_str),
-#        "start_latlng": start_latlng,
-#        "distance": run_data["distance"],
-#        "moving_time": timedelta(seconds=run_data["duration"]),
-#        "elapsed_time": timedelta(
-#            seconds=int((run_data["endTime"] - run_data["startTime"]) / 1000)
-#        ),
-#        "average_speed": run_data["distance"] / run_data["duration"],
-#        "location_country": str(run_data.get("region", "")),
-#    }
-#    return namedtuple("x", d.keys())(*d.values())
+    # 5898009e387e28303988f3b7_9223370441312156007_rn middle
+    keep_id = run_data["id"].split("_")[1]
+
+    start_time = run_data["startTime"]
+    avg_heart_rate = None
+    decoded_hr_data = []
+    if run_data["heartRate"]:
+        avg_heart_rate = run_data["heartRate"].get("averageHeartRate", None)
+        heart_rate_data = run_data["heartRate"].get("heartRates", None)
+        if heart_rate_data is not None:
+            decoded_hr_data = decode_runmap_data(heart_rate_data)
+        # fix #66
+        if avg_heart_rate and avg_heart_rate < 0:
+            avg_heart_rate = None
+
+    if run_data["geoPoints"]:
+        run_points_data = decode_runmap_data(run_data["geoPoints"], True)
+        run_points_data_gpx = run_points_data
+        if TRANS_GCJ02_TO_WGS84:
+            run_points_data = [
+                list(eviltransform.gcj2wgs(p["latitude"], p["longitude"]))
+                for p in run_points_data
+            ]
+            for i, p in enumerate(run_points_data_gpx):
+                p["latitude"] = run_points_data[i][0]
+                p["longitude"] = run_points_data[i][1]
+
+        for p in run_points_data_gpx:
+            p_hr = find_nearest_hr(decoded_hr_data, int(p["timestamp"]), start_time)
+            if p_hr:
+                p["hr"] = p_hr
+        if with_download_gpx:
+            if (
+                str(keep_id) not in old_gpx_ids
+                and run_data["dataType"] == "outdoorRunning"
+            ):
+                gpx_data = parse_points_to_gpx(run_points_data_gpx, start_time)
+                download_keep_gpx(gpx_data, str(keep_id))
+    else:
+        print(f"ID {keep_id} no gps data")
+    polyline_str = polyline.encode(run_points_data) if run_points_data else ""
+    start_latlng = start_point(*run_points_data[0]) if run_points_data else None
+    start_date = datetime.utcfromtimestamp(start_time / 1000)
+    tz_name = run_data.get("timezone", "")
+    start_date_local = adjust_time(start_date, tz_name)
+    end = datetime.utcfromtimestamp(run_data["endTime"] / 1000)
+    end_local = adjust_time(end, tz_name)
+    if not run_data["duration"]:
+        print(f"ID {keep_id} has no total time just ignore please check")
+        return
+    d = {
+        "id": int(keep_id),
+        "name": "run from keep",
+        # future to support others workout now only for run
+        "type": "Run",
+        "start_date": datetime.strftime(start_date, "%Y-%m-%d %H:%M:%S"),
+        "end": datetime.strftime(end, "%Y-%m-%d %H:%M:%S"),
+        "start_date_local": datetime.strftime(start_date_local, "%Y-%m-%d %H:%M:%S"),
+        "end_local": datetime.strftime(end_local, "%Y-%m-%d %H:%M:%S"),
+        "length": run_data["distance"],
+        "average_heartrate": int(avg_heart_rate) if avg_heart_rate else None,
+        "map": run_map(polyline_str),
+        "start_latlng": start_latlng,
+        "distance": run_data["distance"],
+        "moving_time": timedelta(seconds=run_data["duration"]),
+        "elapsed_time": timedelta(
+            seconds=int((run_data["endTime"] - run_data["startTime"]) / 1000)
+        ),
+        "average_speed": run_data["distance"] / run_data["duration"],
+        "location_country": str(run_data.get("region", "")),
+    }
+    return namedtuple("x", d.keys())(*d.values())
 
 
 def get_all_keep_tracks(email, password, old_tracks_ids, with_download_gpx=False):
