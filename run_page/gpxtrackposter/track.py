@@ -320,9 +320,13 @@ class Track:
         }
 
     def to_namedtuple(self):
+        # 如果文件名包含 .gpx，则不生成 namedtuple
+        if any(file_name.endswith('.gpx') for file_name in self.file_names):
+            return None
+        
         d = {
             "id": self.run_id,
-            "name": "run from gpx",  # maybe change later
+            "name": "run from gpx",  # 这里可以改为其他标识，或者根据不同来源的数据使用不同名称
             "type": "Run",  # Run for now only support run for now maybe change later
             "start_date": self.start_time.strftime("%Y-%m-%d %H:%M:%S"),
             "end": self.end_time.strftime("%Y-%m-%d %H:%M:%S"),
@@ -336,5 +340,5 @@ class Track:
             "start_latlng": self.start_latlng,
         }
         d.update(self.moving_dict)
-        # return a nametuple that can use . to get attr
+        # 返回 nametuple，可以使用 . 来获取属性
         return namedtuple("x", d.keys())(*d.values())
