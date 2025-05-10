@@ -11,7 +11,7 @@ interface ISiteMetadataResult {
 
 const data: ISiteMetadataResult = {
   siteTitle: 'imyxl的跑步记录',
-  siteUrl: 'https://run.imyxl.com',
+  siteUrl: 'https://running-lyart.vercel.app',
   logo: '',
   description: 'Personal site and blog',
   navLinks: [
